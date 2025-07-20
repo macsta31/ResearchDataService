@@ -1,0 +1,14 @@
+{
+  "env": {
+    "node": true
+  },
+  "overrides": [
+    {
+      "files": ["migrations/**/*.js"],
+      "env": {
+        "node": true,
+        "commonjs": true
+      }
+    }
+  ]
+}

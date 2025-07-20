@@ -1,0 +1,36 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# TypeScript
+dist/
+build/
+*.tsbuildinfo
+
+# Environment files
+.env
+.env.*.local
+
+# Logs
+logs/
+*.log
+
+# Docker
+docker-compose.override.yml
+*.pid
+
+# Database
+pgdata/
+
+# VSCode settings
+.vscode/
+
+# OS files
+.DS_Store
+
+# Migration compiled files (optional, depending on your setup)
+migrations/*.js
+migrations/*.d.ts
