@@ -5,6 +5,7 @@ import { db } from "./db";
 import datasetsRouter from "./routes/dataset";
 import projectsRouter from "./routes/project";
 import visitsRouter from "./routes/visit";
+import researchersRouter from "./routes/researcher";
 
 const app = express();
 const port = 3000;
@@ -29,8 +30,8 @@ app.listen(port, () => {
 });
 
 app.use("/datasets", datasetsRouter);
-app.use("projects", projectsRouter);
-app.use("/visits", visitsRouter);
 app.use("/projects", projectsRouter);
+app.use("/visits", visitsRouter);
+app.use("/researchers", researchersRouter);
 
 export default app;

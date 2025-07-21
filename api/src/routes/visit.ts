@@ -49,4 +49,36 @@ visitsRouter.get("/:id", async (req, res) => {
   }
 });
 
+visitsRouter.get("/", async (req, res) => {
+  try {
+    const { researcherId } = req.query;
+    if (researcherId) {
+      const visits = await visitController.getByResearcherId(
+        researcherId as string
+      );
+      return res.status(200).json(visits);
+    } else {
+      const visits = await visitController.get();
+      res.status(200).json(visits);
+    }
+  } catch (error) {
+    console.error("Error retrieving visits:", error);
+    res
+      .status(400)
+      .json({ error: error.message, message: "Failed to retrieve visits" });
+  }
+});
+
+visitsRouter.put("/:id", async (req, res) => {
+  try {
+    const updatedVisit = await visitController.update(req.params.id, req.body);
+    res.status(200).json(updatedVisit);
+  } catch (error) {
+    console.error("Error updating visit:", error);
+    res
+      .status(400)
+      .json({ error: error.message, message: "Failed to update visit" });
+  }
+});
+
 export default visitsRouter;

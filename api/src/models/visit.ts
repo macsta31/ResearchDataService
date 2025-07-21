@@ -2,8 +2,8 @@ import { UUID } from "../types/uuid";
 
 export interface Visit {
   id: UUID;
-  participant_id: UUID | null;
-  visit_number: number | 0;
+  participant_id: string | null;
+  visit_number: number | 1;
   notes: string | "";
   dataset_id: UUID;
   dirty_storage_url: URL | null;
@@ -15,3 +15,7 @@ export interface Visit {
 }
 
 export type CreateVisit = Omit<Visit, 'id' | 'created_at' | 'updated_at'>;
+
+export type UpdateVisit = Partial<CreateVisit> & {
+  updated_at: Date;
+};

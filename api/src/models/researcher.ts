@@ -13,3 +13,7 @@ export interface Researcher {
 
 export type CreateResearcher = Omit<Researcher, 'id' | 'created_at' | 'updated_at'>;
 
+export type UpdateResearcher = Partial<CreateResearcher> & {
+  updated_at: Date;
+};
+

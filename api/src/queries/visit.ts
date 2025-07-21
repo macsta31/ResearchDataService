@@ -1,3 +1,6 @@
+import { UpdateVisit } from "../models/visit";
+import { UUID } from "../types/uuid";
+
 export const createVisitsTable = `
 CREATE TABLE IF NOT EXISTS visits (
   id UUID PRIMARY KEY DEFAULT (gen_random_uuid()),
@@ -13,7 +16,6 @@ CREATE TABLE IF NOT EXISTS visits (
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
   FOREIGN KEY (researcher_id) REFERENCES researchers(id),
   FOREIGN KEY (dataset_id) REFERENCES datasets(id),
-  FOREIGN KEY (participant_id) REFERENCES participants(id)
 );
 `;
 
@@ -47,5 +49,53 @@ RETURNING id;`;
 export const buildGetVisitByIdQuery = (id: string) => {
   const query = `SELECT * FROM visits WHERE id = $1;`;
   const values = [id];
+  return { query, values };
+};
+
+export const buildGetVisits = (limit: number = 100, offset: number = 0) => {
+  const query = `SELECT * FROM visits LIMIT $1 OFFSET $2;`;
+  const values = [limit, offset];
+  return { query, values };
+};
+
+export const buildGetVisitsByResearcherIdQuery = (
+  researcherId: string,
+  limit: number = 100,
+  offset: number = 0
+) => {
+  const query = `SELECT * FROM visits WHERE researcher_id = $1 LIMIT $2 OFFSET $3;`;
+  const values = [researcherId, limit, offset];
+  return { query, values };
+};
+
+export const buildUpdateVisitQuery = (id: UUID, data: UpdateVisit) => {
+  const { updated_at, ...fields } = data;
+
+  if (!id) {
+    throw new Error("ID is required for updating a dataset");
+  }
+
+  if (!updated_at) {
+    throw new Error("Updated at timestamp is required for updating a dataset");
+  }
+
+  const entries = Object.entries(fields);
+
+  // Build SET clauses with correct parameter numbers
+  const setClauses = entries
+    .map(([key], index) => `${key} = $${index + 1}`)
+    .join(", ");
+
+  const updatedAtParamNumber = entries.length + 1;
+  const idParamNumber = entries.length + 2;
+
+  const query = `
+UPDATE visits
+SET ${setClauses}, updated_at = $${updatedAtParamNumber}
+WHERE id = $${idParamNumber}
+RETURNING *;`;
+
+  const values = [...entries.map(([, value]) => value), updated_at, id];
+
   return { query, values };
 };

@@ -11,3 +11,7 @@ export interface Project {
 }
 
 export type CreateProject = Omit<Project, "id" | "created_at" | "updated_at">;
+
+export type UpdateProject = Partial<CreateProject> & {
+  updated_at: Date;
+};

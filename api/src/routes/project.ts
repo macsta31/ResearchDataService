@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { projectController } from "../controllers/project";
+import { logger } from "../helpers/logger";
 const projectsRouter = Router();
 
 /**
@@ -17,13 +18,17 @@ const projectsRouter = Router();
  */
 projectsRouter.post("/", async (req, res) => {
   try {
+    logger.info("Creating project with data:", req.body);
     const result = await projectController.create(req.body);
     res.status(201).json({ id: result.id });
   } catch (error) {
-    console.error("Error creating project:", error);
-    res
-      .status(400)
-      .json({ error: error.message, message: "Failed to create project" });
+    res.status(400).json({
+      error: {
+        code: error.code || "PROJECT_CREATION_FAILED",
+        details: error.detail || "Failed to create project",
+      },
+      message: "Failed to create project",
+    });
   }
 });
 
@@ -49,6 +54,40 @@ projectsRouter.get("/:id", async (req, res) => {
     res
       .status(400)
       .json({ error: error.message, message: "Failed to retrieve project" });
+  }
+});
+
+projectsRouter.get("/", async (req, res) => {
+  try {
+    const { researcherId } = req.query;
+    if (researcherId) {
+      const projects = await projectController.getByResearcherId(
+        researcherId as string
+      );
+      return res.status(200).json(projects);
+    }
+    const projects = await projectController.get();
+    res.status(200).json(projects);
+  } catch (error) {
+    console.error("Error retrieving projects:", error);
+    res
+      .status(400)
+      .json({ error: error.message, message: "Failed to retrieve projects" });
+  }
+});
+
+projectsRouter.put("/:id", async (req, res) => {
+  try {
+    const updatedProject = await projectController.update(
+      req.params.id,
+      req.body
+    );
+    res.status(200).json(updatedProject);
+  } catch (error) {
+    console.error("Error updating project:", error);
+    res
+      .status(400)
+      .json({ error: error.message, message: "Failed to update project" });
   }
 });
 

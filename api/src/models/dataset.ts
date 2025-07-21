@@ -11,3 +11,7 @@ export interface Dataset {
 }
 
 export type CreateDataset = Omit<Dataset, "id" | "created_at" | "updated_at">;
+
+export type UpdateDataset = Partial<CreateDataset> & {
+  updated_at: Date;
+};

@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
 import { DatasetController } from "../controllers/dataset";
+import { Dataset } from "../models/dataset";
 
 const datasetsRouter = Router();
 
@@ -51,6 +52,43 @@ datasetsRouter.get("/:id", async (req: Request, res: Response) => {
     res
       .status(400)
       .json({ error: error.message, message: "Failed to retrieve dataset" });
+  }
+});
+
+datasetsRouter.get("/", async (req: Request, res: Response) => {
+  try {
+    const { researcherId } = req.query;
+    let datasets: Dataset[] = [];
+    if (researcherId) {
+      datasets = await DatasetController.getByResearcherId(
+        researcherId as string
+      );
+      return res.status(200).json(datasets);
+    } else {
+      datasets = await DatasetController.get();
+    }
+
+    res.status(200).json(datasets);
+  } catch (error) {
+    console.error("Error retrieving datasets:", error);
+    res
+      .status(400)
+      .json({ error: error.message, message: "Failed to retrieve datasets" });
+  }
+});
+
+datasetsRouter.put("/:id", async (req: Request, res: Response) => {
+  try {
+    const updatedDataset = await DatasetController.update(
+      req.params.id,
+      req.body
+    );
+    res.status(200).json(updatedDataset);
+  } catch (error) {
+    console.error("Error updating dataset:", error);
+    res
+      .status(400)
+      .json({ error: error.message, message: "Failed to update dataset" });
   }
 });
 

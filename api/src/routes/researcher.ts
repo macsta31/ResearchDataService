@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import { researcherController } from "../controllers/researcher";
+import { logger } from "../helpers/logger";
 
 const researchersRouter = Router();
 
@@ -14,6 +15,7 @@ const researchersRouter = Router();
  */
 researchersRouter.post("/", async (req, res) => {
   try {
+    logger.info("Creating researcher with data:", req.body);
     const result = await researcherController.create(req.body);
     res.status(201).json({ id: result.id });
   } catch (error) {
@@ -46,6 +48,21 @@ researchersRouter.get("/:id", async (req, res) => {
     res
       .status(400)
       .json({ error: error.message, message: "Failed to retrieve researcher" });
+  }
+});
+
+researchersRouter.put("/:id", async (req, res) => {
+  try {
+    const updatedResearcher = await researcherController.update(
+      req.params.id,
+      req.body
+    );
+    res.status(200).json(updatedResearcher);
+  } catch (error) {
+    console.error("Error updating researcher:", error);
+    res
+      .status(400)
+      .json({ error: error.message, message: "Failed to update researcher" });
   }
 });
 
