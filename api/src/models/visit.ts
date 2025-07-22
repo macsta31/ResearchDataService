@@ -7,6 +7,7 @@ export interface Visit {
   notes: string | "";
   dataset_id: UUID;
   dirty_storage_url: URL | null;
+  temp_storage_url: URL | null;
   cleaned_storage_url: URL | null;
   approx_visit_timestamp: Date | null;
   created_at: Date;

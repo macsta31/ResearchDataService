@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   db:
@@ -19,13 +19,24 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - db
+      - redis
     environment:
       DATABASE_URL: postgres://research_admin:V9r8kLm2pXqTf7Z1@db:5432/research_project
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_URL: redis://redis:6379
     ports:
       - "3000:3000"
     volumes:
       - .:/app
     command: npm run start:dev
 
+  redis:
+    image: redis:latest
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
 volumes:
   pgdata:
+  redis:

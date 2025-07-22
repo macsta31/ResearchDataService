@@ -26,6 +26,7 @@ export const visitController: VisitController = {
       visitData.notes,
       visitData.dataset_id,
       visitData.dirty_storage_url,
+      visitData.temp_storage_url,
       visitData.cleaned_storage_url,
       visitData.approx_visit_timestamp,
       visitData.participant_id

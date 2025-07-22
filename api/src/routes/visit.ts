@@ -1,6 +1,9 @@
 import { Router } from "express";
 
 import { visitController } from "../controllers/visit";
+import { logger } from "../helpers/logger";
+import { cleaningQueue } from "../queues/cleaningQueue";
+import { isValidCleaningMethod } from "../types/cleaning";
 
 const visitsRouter = Router();
 
@@ -78,6 +81,58 @@ visitsRouter.put("/:id", async (req, res) => {
     res
       .status(400)
       .json({ error: error.message, message: "Failed to update visit" });
+  }
+});
+
+visitsRouter.post("/:id/clean", async (req, res) => {
+  try {
+    const visitId = req.params.id;
+
+    if (!visitId) {
+      return res.status(400).json({ error: "Visit ID is required" });
+    }
+
+    if (!req.body || !req.body.cleaningMethod) {
+      return res.status(400).json({ error: "Cleaning method is required" });
+    }
+
+    const { cleaningMethod } = req.body;
+
+    logger.info("Cleaning method received:", cleaningMethod);
+
+    if (!cleaningMethod || !isValidCleaningMethod(cleaningMethod)) {
+      return res.status(400).json({ error: "Invalid cleaning method" });
+    }
+
+    logger.info(`Cleaning visit with ID: ${visitId}`);
+
+    // Get the visit by ID to ensure it exists
+    const visit = await visitController.getById(req.params.id);
+    if (!visit) {
+      return res.status(404).json({ error: "Visit not found" });
+    }
+
+    const queueElement = await cleaningQueue.add(
+      `visit-clean-${req.params.id}`,
+      {
+        visitId: visit.id,
+        dirty_file_url: visit.dirty_storage_url,
+        cleaning_method: cleaningMethod,
+      }
+    );
+
+    logger.info(
+      `Added visit ${visitId} to cleaning queue with ID: ${queueElement.id}`
+    );
+    res
+      .status(200)
+      .json({ message: "Visit cleaning started", queueId: queueElement.id });
+  } catch (error) {
+    logger.error("Error cleaning visit:", error);
+    res.status(500).json({
+      error: error.message,
+      message: "Failed to clean visit",
+    });
   }
 });
 

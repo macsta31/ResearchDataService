@@ -25,13 +25,14 @@ export const buildCreateVisitQuery = (
   notes: string,
   datasetId: string,
   dirtyStorageUrl: URL | null,
+  tempStorageUrl: URL | null,
   cleanedStorageUrl: URL | null,
   approxVisitTimestamp: Date | null,
   participantId: string | null
 ) => {
   const query = `
-INSERT INTO visits (researcher_id, visit_number, notes, dataset_id, dirty_storage_url, cleaned_storage_url, approx_visit_timestamp, participant_id, created_at, updated_at)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())
+INSERT INTO visits (researcher_id, visit_number, notes, dataset_id, dirty_storage_url, temp_storage_url, cleaned_storage_url, approx_visit_timestamp, participant_id, created_at, updated_at)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW(), NOW())
 RETURNING id;`;
   const values = [
     researcherId,
@@ -39,6 +40,7 @@ RETURNING id;`;
     notes,
     datasetId,
     dirtyStorageUrl,
+    tempStorageUrl,
     cleanedStorageUrl,
     approxVisitTimestamp,
     participantId,

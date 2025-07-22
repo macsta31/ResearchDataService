@@ -34,3 +34,5 @@ pgdata/
 # Migration compiled files (optional, depending on your setup)
 migrations/*.js
 migrations/*.d.ts
+
+*/venv
