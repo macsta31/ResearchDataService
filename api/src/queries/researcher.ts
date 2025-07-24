@@ -1,5 +1,5 @@
 import { UpdateResearcher } from "../models/researcher";
-import { UUID } from "../types/uuid";
+import { UUID } from "@mack/shared/types/uuid";
 
 export const createResearchersTable = `
 CREATE TABLE IF NOT EXISTS researchers (

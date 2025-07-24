@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { researcherController } from "../controllers/researcher";
-import { logger } from "../helpers/logger";
+import { logger } from "@mack/shared/helpers/logger";
 
 const researchersRouter = Router();
 

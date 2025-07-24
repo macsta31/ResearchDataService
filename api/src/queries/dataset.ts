@@ -1,5 +1,5 @@
 import { UpdateDataset } from "../models/dataset";
-import { UUID } from "../types/uuid";
+import { UUID } from "@mack/shared/types/uuid";
 
 export const createDatasetsTable = `
 CREATE TABLE IF NOT EXISTS datasets (

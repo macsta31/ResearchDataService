@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { projectController } from "../controllers/project";
-import { logger } from "../helpers/logger";
+import { logger } from "@mack/shared/helpers/logger";
 const projectsRouter = Router();
 
 /**

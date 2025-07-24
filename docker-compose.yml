@@ -15,21 +15,19 @@ services:
 
   api:
     build:
-      context: ./api
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: api/Dockerfile
     depends_on:
       - db
       - redis
-    environment:
-      DATABASE_URL: postgres://research_admin:V9r8kLm2pXqTf7Z1@db:5432/research_project
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      REDIS_URL: redis://redis:6379
     ports:
       - "3000:3000"
-    volumes:
-      - .:/app
-    command: npm run start:dev
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      DATABASE_URL: postgres://research_admin:V9r8kLm2pXqTf7Z1@db:5432/research_project
+      REDIS_URL: redis://redis:6379
+      TS_NODE_PROJECT: /app/api/tsconfig.build.json
 
   redis:
     image: redis:latest

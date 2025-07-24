@@ -1,4 +1,4 @@
-import { UUID } from "../types/uuid";
+import { UUID } from "@mack/shared/types/uuid";
 
 export interface Project {
   id: UUID;

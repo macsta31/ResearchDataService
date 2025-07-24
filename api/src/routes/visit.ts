@@ -1,9 +1,9 @@
 import { Router } from "express";
 
 import { visitController } from "../controllers/visit";
-import { logger } from "../helpers/logger";
+import { logger } from "@mack/shared/helpers/logger";
 import { cleaningQueue } from "../queues/cleaningQueue";
-import { isValidCleaningMethod } from "../types/cleaning";
+import { isValidCleaningMethod } from "@mack/shared/types/cleaning";
 
 const visitsRouter = Router();
 

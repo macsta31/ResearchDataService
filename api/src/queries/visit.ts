@@ -1,5 +1,5 @@
 import { UpdateVisit } from "../models/visit";
-import { UUID } from "../types/uuid";
+import { UUID } from "@mack/shared/types/uuid";
 
 export const createVisitsTable = `
 CREATE TABLE IF NOT EXISTS visits (

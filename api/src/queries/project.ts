@@ -1,5 +1,5 @@
 import { UpdateProject } from "../models/project";
-import { UUID } from "../types/uuid";
+import { UUID } from "@mack/shared/types/uuid";
 
 export const createProjectsTable = `
 CREATE TABLE IF NOT EXISTS projects (

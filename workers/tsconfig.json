@@ -1,3 +1,16 @@
 {
-    
-}
+    "compilerOptions": {
+      "module": "commonjs",
+      "esModuleInterop": true,
+      "target": "es6",
+      "moduleResolution": "node",
+      "sourceMap": true,
+      "outDir": "dist",
+      "paths": {
+        "@mack/shared/*": ["../shared/*"]
+      }
+    },
+    "lib": ["es2015"],
+    "include": ["**/*", "../shared/**/*", "tsconfig.build.json"],
+    "exclude": ["node_modules", "dist", "**/*.spec.ts"]
+  }

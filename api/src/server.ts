@@ -25,13 +25,16 @@ app.get("/", async (req, res) => {
   res.send(`${out.rows[0].now}`);
 });
 
-app.listen(port, () => {
-  return console.log(`Express is listening at http://localhost:${port}`);
-});
+
 
 app.use("/datasets", datasetsRouter);
 app.use("/projects", projectsRouter);
 app.use("/visits", visitsRouter);
 app.use("/researchers", researchersRouter);
+
+app.listen(port, () => {
+  console.log("HELLOOOO", datasetsRouter, projectsRouter, visitsRouter, researchersRouter);
+  return console.log(`Express is listening at http://localhost:${port}`);
+});
 
 export default app;

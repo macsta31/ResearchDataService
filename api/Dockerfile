@@ -1,20 +1,24 @@
 FROM node:21
 
+# Enable and prepare pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
 # Set working directory
-WORKDIR /src
+WORKDIR /app
 
-# Install dependencies
-COPY package*.json ./
-RUN npm install
+# Copy lockfiles and package.json from root
+COPY pnpm-lock.yaml package.json ./
 
-# Copy source code
+# Copy the rest of the monorepo
 COPY . .
 
-# Build TypeScript
-RUN npm run build
+# Install all dependencies for the monorepo
+RUN pnpm install --frozen-lockfile
 
-# Expose port
+RUN pnpm run build
+
+# Expose API port
 EXPOSE 3000
 
-# Default command (can be overridden by docker-compose)
-CMD ["npm", "run", "start:dev"]
+# Run the API in production mode
+CMD ["pnpm", "--filter", "api", "run", "start"]

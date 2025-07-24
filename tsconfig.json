@@ -6,11 +6,13 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "dist",
+    "baseUrl": ".",
     "paths": {
-      "@mack/shared/*": ["../shared/*"]
+      "@mack/shared": ["shared/index.ts"],
+      "@mack/shared/*": ["shared/*"]
     }
   },
   "lib": ["es2015"],
-  "include": ["src/**/*", "../shared/**/*", "tsconfig.build.json"],
+  "include": ["**/*.ts"],
   "exclude": ["node_modules", "dist", "**/*.spec.ts"]
 }
