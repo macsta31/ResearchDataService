@@ -1,4 +1,4 @@
-import { db } from "../db";
+import { db } from "@mack/shared/db/db";
 
 import { CreateVisit, UpdateVisit, Visit } from "../models/visit";
 

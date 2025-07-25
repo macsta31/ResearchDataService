@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import { visitController } from "../controllers/visit";
 import { logger } from "@mack/shared/helpers/logger";
-import { cleaningQueue } from "../queues/cleaningQueue";
+import { cleaningQueue } from "@mack/shared/queues/cleaningQueue";
 import { isValidCleaningMethod } from "@mack/shared/types/cleaning";
 
 const visitsRouter = Router();

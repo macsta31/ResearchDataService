@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { db } from "./db";
+import { db } from "@mack/shared/db/db";
 
 import datasetsRouter from "./routes/dataset";
 import projectsRouter from "./routes/project";

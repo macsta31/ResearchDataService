@@ -1,4 +1,4 @@
-import { db } from "../db";
+import { db } from "@mack/shared/db/db";
 import { Dataset, CreateDataset, UpdateDataset } from "../models/dataset";
 
 import {
