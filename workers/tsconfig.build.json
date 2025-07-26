@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "paths": {
+      "@mack/shared/*": ["../shared/dist/*"]
+    }
+  },
+  "include": ["**/*.ts", "../shared/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts"]
+}

@@ -11,6 +11,14 @@ export enum CleaningMethod {
   ONE_CLASS_SVM = "one_class_svm",
 }
 
-export function isValidCleaningMethod(method: string): method is CleaningMethod {
+export function isValidCleaningMethod(
+  method: string
+): method is CleaningMethod {
   return Object.values(CleaningMethod).includes(method as CleaningMethod);
+}
+
+export interface CleaningJobData {
+  visitId: string;
+  dirty_file_url: URL;
+  cleaning_method: CleaningMethod;
 }

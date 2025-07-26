@@ -1,4 +1,22 @@
 {
-  "name": "workers"
-  
+  "name": "workers",
+  "main": "dist/workers/index.js",
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "build:prod": "tsc --project tsconfig.build.json",
+    "start": "node -r tsconfig-paths/register dist/workers/index.js",
+    "start:dev": "ts-node-dev -r tsconfig-paths/register --project tsconfig.json index.ts",
+    "dev": "ts-node-dev --project tsconfig.json index.ts"
+  },
+  "dependencies": {
+    "@mack/shared": "workspace:*",
+    "bullmq": "^5.56.5",
+    "ioredis": "^5.6.1",
+    "tslib": "^2.8.1",
+    "tsconfig-paths": "^4.2.0"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.0.0"
+  }
 }

@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "main": "dist/server.js",
   "dependencies": {
+    "@bull-board/api": "^6.12.0",
+    "@bull-board/express": "^6.12.0",
     "@mack/shared": "workspace:*",
+    "bullMQ": "link:@bull-board/api/bullMQ",
+    "bullmq": "^5.56.5",
     "tsconfig-paths": "^4.2.0"
   },
   "scripts": {

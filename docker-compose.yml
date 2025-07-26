@@ -35,6 +35,20 @@ services:
     ports:
       - "6379:6379"
 
+  workers:
+    build:
+      context: .
+      dockerfile: workers/Dockerfile
+    depends_on:
+      - redis
+      - db
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      DATABASE_URL: postgres://research_admin:V9r8kLm2pXqTf7Z1@db:5432/research_project
+      REDIS_URL: redis://redis:6379
+      TS_NODE_PROJECT: /app/workers/tsconfig.build.json
+
 volumes:
   pgdata:
   redis:

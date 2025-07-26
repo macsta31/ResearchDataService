@@ -2,7 +2,11 @@ import { Router } from "express";
 
 import { visitController } from "../controllers/visit";
 import { logger } from "@mack/shared/helpers/logger";
-import { cleaningQueue } from "@mack/shared/queues/cleaningQueue";
+import {
+  addCleaningJob,
+  getCleaningJob,
+  removeCleaningJob,
+} from "@mack/shared/queues/cleaningQueue";
 import { isValidCleaningMethod } from "@mack/shared/types/cleaning";
 
 const visitsRouter = Router();
@@ -98,8 +102,6 @@ visitsRouter.post("/:id/clean", async (req, res) => {
 
     const { cleaningMethod } = req.body;
 
-    logger.info("Cleaning method received:", cleaningMethod);
-
     if (!cleaningMethod || !isValidCleaningMethod(cleaningMethod)) {
       return res.status(400).json({ error: "Invalid cleaning method" });
     }
@@ -112,18 +114,17 @@ visitsRouter.post("/:id/clean", async (req, res) => {
       return res.status(404).json({ error: "Visit not found" });
     }
 
-    const queueElement = await cleaningQueue.add(
+    const cleaningJobData = {
+      visitId: visit.id,
+      dirty_file_url: visit.dirty_storage_url,
+      cleaning_method: cleaningMethod,
+    };
+
+    const queueElement = await addCleaningJob(
       `visit-clean-${req.params.id}`,
-      {
-        visitId: visit.id,
-        dirty_file_url: visit.dirty_storage_url,
-        cleaning_method: cleaningMethod,
-      }
+      cleaningJobData
     );
 
-    logger.info(
-      `Added visit ${visitId} to cleaning queue with ID: ${queueElement.id}`
-    );
     res
       .status(200)
       .json({ message: "Visit cleaning started", queueId: queueElement.id });
@@ -132,6 +133,34 @@ visitsRouter.post("/:id/clean", async (req, res) => {
     res.status(500).json({
       error: error.message,
       message: "Failed to clean visit",
+    });
+  }
+});
+
+visitsRouter.post("/:id/cancel-clean", async (req, res) => {
+  try {
+    const visitId = req.params.id;
+
+    const jobId = `visit-clean-${visitId}`;
+
+    const job = await getCleaningJob(jobId);
+
+    logger.info(`Found job`, job);
+
+    await removeCleaningJob(job.id);
+    return res.status(200).json({
+      message: `Cleaning job for visit ${visitId} removed successfuly`,
+    });
+  } catch (err) {
+    if (err.message === "No job found") {
+      return res.status(404).json({
+        message: "Job not found",
+      });
+    }
+    logger.error("Error removing cleaning job", err);
+    return res.status(500).json({
+      message: "Failed to cancel cleaning job",
+      error: err,
     });
   }
 });

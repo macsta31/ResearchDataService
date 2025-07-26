@@ -1,14 +1,7 @@
 import { Worker } from "bullmq";
 import { redisConnection } from "@mack/shared/db/redisClient";
 import { logger } from "@mack/shared/helpers/logger";
-import { CleaningMethod } from "@mack/shared/types/cleaning";
-
-// Define the job data interface
-interface CleaningJobData {
-  visitId: string;
-  dirty_file_url: string;
-  cleaning_method: CleaningMethod;
-}
+import { CleaningJobData } from "@mack/shared/types/cleaning";
 
 // Define the processor function
 async function processCleaningJob(job: { data: CleaningJobData }) {
@@ -35,6 +28,7 @@ async function processCleaningJob(job: { data: CleaningJobData }) {
 // Create the worker
 export const cleaningWorker = new Worker("cleaning", processCleaningJob, {
   connection: redisConnection,
+  removeOnComplete: { count: 0 },
 });
 
 // Handle worker events
